@@ -57,8 +57,8 @@ class Assignment(object):
         self.description = description
     def getDescription(self):
         return self.description
-    __gt__ = lambda self, other: other.getDueDate() < self.getDueDate()
-    __lt__ = lambda self, other: other.getDueDate() > self.getDueDate()
+    __gt__ = lambda self, other: other.getDueDate() > self.getDueDate()
+    __lt__ = lambda self, other: other.getDueDate() < self.getDueDate()
     __eq__ = lambda self, other: other.getDueDate() == self.getDueDate()
 
 
@@ -70,7 +70,7 @@ def saveToFile(lst):
     except :
         pass
     for i in lst:
-        saveString += i.getName() + '\t' + i.getDueDate().strftime('%Y %m %d %H %M') + '\t' + i.getLabel() + '\t' + i.getDescription() + '\n'
+        saveString += i.getName() + '\t' + i.getDueDate().strftime('%Y %m %d %H %M') + '\t' + i.getLabel() + '\t' + i.getDescription()
     save(saveString, 'savedAssignments.txt')
 
 def loadFromFile():
@@ -86,6 +86,20 @@ def loadFromFile():
         print("no previous save file")
     return lst
 
+def removeAssignment(a):
+    try:
+        j = 0
+        for i in assignmentList:
+            if str(a[0]) == str(i.getName()):
+                if str(a[1]) == str(i.getDueDate()):
+                    if str(a[2]) == str(i.getLabel()):
+                        if str(a[3]) == str(i.getDescription()):
+                            assignmentList.pop(j)
+                            saveToFile(assignmentList)
+            j+=1
+
+    except:
+        pass
 
 def start():
     try:
@@ -96,41 +110,6 @@ def start():
     except:
         print("no previous save file")
 
-
-
-###START###
-
-# def timeDiff(t):
-#     t = datetime.datetime.now().date()
-#
-#
-# a = Assignment('A1', 2032, 6, 9, 1, 1, 'b', 'c')
-# b = Assignment('B1', 1980, 7, 19)
-# c = Assignment('C1', 2016, 11, 29)
-# d = Assignment('D1', 2000, 12, 1)
-# print(a.getName())
-# print(a.getDueDate())
-# print(a.getLabel())
-# print(a.getDescription())
-# print(a.getTags())
-# lst = [Assignment('A1', 1994, 6, 9),Assignment('B1', 1980, 7, 19),Assignment('C1', 2016, 11, 29),Assignment('D1', 2000, 12, 1)]
-
-# # saveToFile(lst)
-# a = loadFromFile()
-# print(a)
-# for i in lst:
-#     print(i.getName(),i.getDueDate())
-# print(sorted(lst))
-# lst.sort()
-# for i in lst:
-#     print(i.getName(), i.getDueDate())
-
-
-# today = datetime.datetime.now().date()
-# d = datetime.datetime(year=1994, month=6, day=9, hour=12, minute=30)
-# # datetime.timedelta(t, t2)
-# print("Today is {}".format(d))
-# print("Today is {}".format(datetime.timedelta(t, d)))
 
 class Application(tk.Frame):
     def __init__(self, master):
@@ -143,12 +122,37 @@ class Application(tk.Frame):
         #3: Create the widget using a master as parent
         self.Frame_main = builder.get_object('Frame_main', master)
         self.Button_new = builder.get_object('Button_new', master)
+        self.treeview = builder.get_object('treeview', master)
+        # self.column_del = builder.get_object('column_del', master)
+        self.column_name = builder.get_object('column_name', master)
+        self.column_date = builder.get_object('column_date', master)
+        self.column_label = builder.get_object('column_label', master)
+        self.column_description = builder.get_object('column_description', master)
         # self.Button_new = ttk.Button.(text="TEST")
+        # self.treeview.insert("" , 0,    text="X", values=("1A","1b"))
         builder.connect_callbacks(self)
 
+    def refreshList(self):
+        global assignmentList
+        assignmentList.sort()
+        self.treeview.delete(*self.treeview.get_children())
+        for i in assignmentList:
+            self.treeview.insert("" , 0,    text=i.getName(), values=(i.getName(), i.getDueDate(), i.getLabel(), i.getDescription()))
 
+    def delete(self):
+        # try:
+        print('Delete')
+        selected_item = self.treeview.selection()[0] ## get selected item
+        # t = self.treeview.item(self.treeview.focus()).values
+        t = self.treeview.item(self.treeview.selection())["values"]
+        removeAssignment(t)
+        self.treeview.delete(selected_item)
+        self.refreshList()
+        # except:
+        #     print('No Selection')
 
-
+    def on_treecolumn_click(self):
+        return True
 
     def on_newbutton(self):
         print("New Button Press")
@@ -159,8 +163,10 @@ class Application(tk.Frame):
             assignmentList.sort()
             # printAssignmentList()
             saveToFile(assignmentList)
+            self.refreshList()
         except :
             messagebox.showinfo('Error', 'Invalid Assignment')
+
 
     def setTempName(self, P):
         print('Setting tempName')
@@ -251,7 +257,9 @@ class Application(tk.Frame):
 
 if __name__ == '__main__':
     start()
+    # refreshList()
     root = tk.Tk()
     root.title("Assignment Manager")
     app = Application(root)
+    app.refreshList()
     root.mainloop()
