@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface>
+  <object class="ttk.Frame" id="Frame_main">
+    <property name="height">200</property>
+    <property name="width">200</property>
+    <layout>
+      <property name="column">0</property>
+      <property name="propagate">True</property>
+      <property name="row">0</property>
+      <rows>
+        <row id="0">
+          <property name="minsize">0</property>
+        </row>
+      </rows>
+    </layout>
+    <child>
+      <object class="ttk.Frame" id="Frame_assignments">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">17</property>
+        </layout>
+        <child>
+          <object class="ttk.Treeview" id="Treeview_assignments">
+            <property name="height">20</property>
+            <property name="selectmode">extended</property>
+            <property name="show">tree</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+            <child>
+              <object class="ttk.Treeview.Column" id="Column_1">
+                <property name="column_anchor">w</property>
+                <property name="heading_anchor">w</property>
+                <property name="minwidth">20</property>
+                <property name="stretch">true</property>
+                <property name="text" translatable="yes">Column_1</property>
+                <property name="tree_column">true</property>
+                <property name="visible">true</property>
+                <property name="width">200</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Frame" id="Frame_new">
+        <property name="height">200</property>
+        <property name="width">200</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="propagate">True</property>
+          <property name="row">18</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="Label_name">
+            <property name="text" translatable="yes">Name: </property>
+            <property name="width">9</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="Entry_name">
+            <property name="validate">key</property>
+            <property name="validatecommand">setTempName</property>
+            <property name="validatecommand_args">%P</property>
+            <property name="width">60</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="columnspan">1</property>
+              <property name="propagate">True</property>
+              <property name="row">0</property>
+              <property name="rowspan">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_date">
+            <property name="text" translatable="yes">Date: </property>
+            <property name="width">9</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_label">
+            <property name="text" translatable="yes">Label: </property>
+            <property name="width">9</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">8</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="Entry_label">
+            <property name="validate">key</property>
+            <property name="validatecommand">setTempLabel</property>
+            <property name="validatecommand_args">%P</property>
+            <property name="width">60</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">8</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Label" id="Label_description">
+            <property name="justify">right</property>
+            <property name="text" translatable="yes">Description: </property>
+            <property name="width">9</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">10</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="Entry_description">
+            <property name="validate">key</property>
+            <property name="validatecommand">setTempDescription</property>
+            <property name="validatecommand_args">%P</property>
+            <property name="width">60</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">10</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="Button_new">
+            <property name="command">on_newbutton</property>
+            <property name="text" translatable="yes">Save</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="propagate">True</property>
+              <property name="row">12</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Frame" id="Frame_date">
+            <property name="height">200</property>
+            <property name="width">200</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="propagate">True</property>
+              <property name="row">2</property>
+              <property name="sticky">w</property>
+              <columns>
+                <column id="0">
+                  <property name="minsize">0</property>
+                </column>
+              </columns>
+              <rows>
+                <row id="0">
+                  <property name="minsize">0</property>
+                </row>
+              </rows>
+            </layout>
+            <child>
+              <object class="ttk.Combobox" id="Combobox_day">
+                <property name="state">readonly</property>
+                <property name="validate">focusin</property>
+                <property name="validatecommand">setTempDueDay</property>
+                <property name="validatecommand_args">%P</property>
+                <property name="values">1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="columnspan">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                  <property name="rowspan">1</property>
+                  <property name="sticky">w</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="Combobox_month">
+                <property name="state">readonly</property>
+                <property name="validate">focusin</property>
+                <property name="validatecommand">setTempDueMonth</property>
+                <property name="validatecommand_args">%P</property>
+                <property name="values">January February March April May June July August September October November December</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="Combobox_year">
+                <property name="state">readonly</property>
+                <property name="validate">focusin</property>
+                <property name="validatecommand">setTempDueYear</property>
+                <property name="validatecommand_args">%P</property>
+                <property name="values">2015 2016 2017 2018 2019 2020 2021 2022 2023 2024 2025</property>
+                <property name="width">8</property>
+                <layout>
+                  <property name="column">2</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="Label_time">
+                <property name="text" translatable="yes">           Time: </property>
+                <property name="width">9</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="Combobox_hour">
+                <property name="state">readonly</property>
+                <property name="validate">focusin</property>
+                <property name="validatecommand">setTempDueHour</property>
+                <property name="validatecommand_args">%P</property>
+                <property name="values">1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 </property>
+                <property name="width">6</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Combobox" id="Combobox_minute">
+                <property name="height">0</property>
+                <property name="state">readonly</property>
+                <property name="validate">focusin</property>
+                <property name="validatecommand">setTempDueMin</property>
+                <property name="validatecommand_args">%P</property>
+                <property name="values"> 00 05 10 15 20 25 30 35 40 45 50 55</property>
+                <property name="width">6</property>
+                <layout>
+                  <property name="column">6</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Label" id="Label_1">
+                <property name="text" translatable="yes">:</property>
+                <layout>
+                  <property name="column">5</property>
+                  <property name="propagate">True</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
