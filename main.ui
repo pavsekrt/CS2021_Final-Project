@@ -33,7 +33,6 @@
             <child>
               <object class="ttk.Treeview.Column" id="column_del">
                 <property name="column_anchor">w</property>
-                <property name="command">on_treecolumn_click</property>
                 <property name="heading_anchor">w</property>
                 <property name="minwidth">20</property>
                 <property name="stretch">True</property>

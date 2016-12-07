@@ -151,8 +151,6 @@ class Application(tk.Frame):
         # except:
         #     print('No Selection')
 
-    def on_treecolumn_click(self):
-        return True
 
     def on_newbutton(self):
         print("New Button Press")
