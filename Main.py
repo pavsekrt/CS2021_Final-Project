@@ -1,7 +1,4 @@
-
-# from kivy.uix.floatlayout import FloatLayout
-# from kivy.base import runTouchApp
-# from kivy.uix.button import Button
+##Python project - Ryan Pavsek
 from save import save
 from datetime import datetime
 import datetime
@@ -13,12 +10,13 @@ from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
 
-assignmentList = []
+##GLOBAL VARIABLES
+assignmentList = [] #main list (gets displayed)
 tempName, tempLabel, tempDescription = '', '', ''
 tempDueYear, tempDueMonth, tempDueDay, tempDueHour, tempDueMin = 0, 0, 0, 0, 0
 
 
-def printAssignmentList():
+def printAssignmentList():#prints assignmentList
     global assignmentList
     print(assignmentList)
     for i in assignmentList:
@@ -26,77 +24,69 @@ def printAssignmentList():
 
 
 class Assignment(object):
-    # def __init__(self, name, dueYear, dueMonth, dueDay, dueHour=24, dueMin=0, label='None', description='No Description'):
-    #     self.name = name
-    #     self.dueDate = datetime.datetime(year=dueYear, month=dueMonth, day=dueDay, hour=dueHour, minute=dueMin)
-    #     self.label = label
-    #     self.description = description
     def __init__(self, name, dueYear, dueMonth, dueDay, dueHour=24, dueMin=0, label='', description=''):
         self.name = name
         self.dueDate = datetime.datetime(year=dueYear, month=dueMonth, day=dueDay, hour=dueHour, minute=dueMin)
         self.label = label
         self.description = description
-    # def __init__(self, name, date, label='None', description='No Description'):
-    #     self.name = name
-    #     self.dueDate = date
-    #     self.label = label
-    #     self.description = description
-    def setName(self, name):
+    def setName(self, name):# name setter
         self.name = name
-    def getName(self):
+    def getName(self):# name getter
         return self.name
-    def setDueDate(self, dueDate):
+    def setDueDate(self, dueDate):# date setter
         self.dueDate = dueDate
-    def getDueDate(self):
+    def getDueDate(self): # date getter
         return self.dueDate
-    def setLabel(self, label):
+    def setLabel(self, label):# label setter
         self.label = label
-    def getLabel(self):
+    def getLabel(self): # label getter
         return self.label
-    def setDescription(self, description):
+    def setDescription(self, description): #description setter
         self.description = description
-    def getDescription(self):
+    def getDescription(self): #description getter
         return self.description
-    __gt__ = lambda self, other: other.getDueDate() > self.getDueDate()
-    __lt__ = lambda self, other: other.getDueDate() < self.getDueDate()
-    __eq__ = lambda self, other: other.getDueDate() == self.getDueDate()
+    #USED FOR SORTING
+    __gt__ = lambda self, other: other.getDueDate() > self.getDueDate() # sets greater than
+    __lt__ = lambda self, other: other.getDueDate() < self.getDueDate() # sets less than
+    __eq__ = lambda self, other: other.getDueDate() == self.getDueDate()# sets equal to
 
 
 
 def saveToFile(lst):
-    saveString = ''
+    saveString = ''#create empty string
     try:
-        os.remove('savedAssignments.txt')
+        os.remove('savedAssignments.txt')#delete old save
     except :
         pass
-    for i in lst:
+    for i in lst:# set saveString to assignmentList
         saveString += i.getName() + '\t' + i.getDueDate().strftime('%Y %m %d %H %M') + '\t' + i.getLabel() + '\t' + i.getDescription()
-    save(saveString, 'savedAssignments.txt')
+    save(saveString, 'savedAssignments.txt') # using save API set savedAssignments.txt to saveString
 
 def loadFromFile():
-    lst = []
+    lst = []# create empty list
     try :
-        with open('savedAssignments.txt') as f:
-            for line in f:
+        with open('savedAssignments.txt') as f:#open save file
+            for line in f:#read save file
                 nam, dat, lab, des = line.split('\t')
                 d = datetime.datetime.strptime(dat, '%Y %m %d %H %M')
+                #write save file entry to lst
                 lst.append(Assignment(nam, d.year, d.month, d.day, d.hour, d.minute, lab, des))
         print("save file loaded")
     except :
-        print("no previous save file")
+        print("no previous save file")#no previous save
     return lst
 
 def removeAssignment(a):
     try:
-        j = 0
+        j = 0 #location in list
         for i in assignmentList:
             if str(a[0]) == str(i.getName()):
                 if str(a[1]) == str(i.getDueDate()):
                     if str(a[2]) == str(i.getLabel()):
                         if str(a[3]) == str(i.getDescription()):
-                            assignmentList.pop(j)
-                            saveToFile(assignmentList)
-            j+=1
+                            assignmentList.pop(j)#remove assignment
+                            saveToFile(assignmentList)#save to data file
+            j+=1#increment location
 
     except:
         pass
@@ -104,99 +94,94 @@ def removeAssignment(a):
 def start():
     try:
         global assignmentList
-        assignmentList = loadFromFile()
-        assignmentList.sort()
-        printAssignmentList()
+        assignmentList = loadFromFile()#load old assignments
+        assignmentList.sort()#sort assignments
+        printAssignmentList()#print in terminal assignments
     except:
-        print("no previous save file")
+        pass
 
 
 class Application(tk.Frame):
     def __init__(self, master):
-        #1: Create a builder
+        # Create a builder
         self.builder = builder = pygubu.Builder()
-
-        #2: Load an ui file
+        # Load an ui file
         builder.add_from_file('main.ui')
 
-        #3: Create the widget using a master as parent
+        # Create the widgets using a master as parent
         self.Frame_main = builder.get_object('Frame_main', master)
         self.Button_new = builder.get_object('Button_new', master)
         self.treeview = builder.get_object('treeview', master)
-        # self.column_del = builder.get_object('column_del', master)
         self.column_name = builder.get_object('column_name', master)
         self.column_date = builder.get_object('column_date', master)
         self.column_label = builder.get_object('column_label', master)
         self.column_description = builder.get_object('column_description', master)
-        # self.Button_new = ttk.Button.(text="TEST")
-        # self.treeview.insert("" , 0,    text="X", values=("1A","1b"))
         builder.connect_callbacks(self)
 
     def refreshList(self):
         global assignmentList
-        assignmentList.sort()
-        self.treeview.delete(*self.treeview.get_children())
-        for i in assignmentList:
+        assignmentList.sort()#sort assignmentList
+        self.treeview.delete(*self.treeview.get_children())#delete all items in treeview
+        for i in assignmentList:#insert all items in assignmentList into treeview
             self.treeview.insert("" , 0,    text=i.getName(), values=(i.getName(), i.getDueDate(), i.getLabel(), i.getDescription()))
 
     def delete(self):
-        # try:
+        try:
         print('Delete')
-        selected_item = self.treeview.selection()[0] ## get selected item
-        # t = self.treeview.item(self.treeview.focus()).values
-        t = self.treeview.item(self.treeview.selection())["values"]
-        removeAssignment(t)
-        self.treeview.delete(selected_item)
-        self.refreshList()
-        # except:
-        #     print('No Selection')
+            selected_item = self.treeview.selection()[0] ## get selected item
+            t = self.treeview.item(self.treeview.selection())["values"] # get information from selection
+            removeAssignment(t) #remove item from assignmentList
+            self.treeview.delete(selected_item)# remove from treeview
+            self.refreshList()
+        except:
+            print('No Selection')
 
 
     def on_newbutton(self):
         print("New Button Press")
         global assignmentList
         try:
-            # print('N: ', tempName, ' Y: ', tempDueYear, ' M: ', tempDueMonth, ' D: ', tempDueDay, ' H: ', tempDueHour, ' M: ', tempDueMin, ' L: ', tempLabel, ' D: ', tempDescription)
+            #add new assignment to assignmentList
             assignmentList.append(Assignment(tempName, tempDueYear, tempDueMonth, tempDueDay, tempDueHour, tempDueMin, tempLabel, tempDescription))
             assignmentList.sort()
-            # printAssignmentList()
-            saveToFile(assignmentList)
+            saveToFile(assignmentList)##save
             self.refreshList()
         except :
-            messagebox.showinfo('Error', 'Invalid Assignment')
+            messagebox.showinfo('Error', 'Invalid Assignment')#if invalid data is passed
 
 
-    def setTempName(self, P):
+    def setTempName(self, P):#sets tempName to current input
         print('Setting tempName')
         global tempName
         tempName = P
         print(tempName)
         return True
-    def setTempLabel(self, P):
+    def setTempLabel(self, P):#sets tempLabel to current input
         print('Setting tempLabel')
         global tempLabel
         tempLabel = P
         print(tempLabel)
         return True
-    def setTempDescription(self, P):
+    def setTempDescription(self, P):#sets tempDescription to current input
         print('Setting tempDescription')
         global tempDescription
         tempDescription = P
         print(tempDescription)
         return True
-    def setTempDueDay(self, P):
+    def setTempDueDay(self, P):#sets tempDueDay to current input
         print('Setting tempDueDay')
         global tempDueDay
         try:
-            tempDueDay = int(P)
+            tempDueDay = int(P)#set string to int
             print(tempDueDay)
         except :
             pass
         return True
-    def setTempDueMonth(self, P):
+    def setTempDueMonth(self, P):#sets tempDueMonth to current input
         print('Setting tempDueMonth')
         global tempDueMonth
         D = 0
+        #string to int
         if P == "January":
             D = 1
         elif P == "February":
@@ -224,29 +209,29 @@ class Application(tk.Frame):
         tempDueMonth = D
         print(tempDueMonth)
         return True
-    def setTempDueYear(self, P):
+    def setTempDueYear(self, P):#sets tempDueYear to current input
         print('Setting tempDueYear')
         global tempDueYear
         try:
-            tempDueYear = int(P)
+            tempDueYear = int(P)#set string to int
             print(tempDueYear)
         except :
             pass
         return True
-    def setTempDueHour(self, P):
+    def setTempDueHour(self, P):#sets tempDueHour to current input
         print('Setting tempDueHour')
         global tempDueHour
         try:
-            tempDueHour = int(P)
+            tempDueHour = int(P)#set string to int
             print(tempDueHour)
         except :
             pass
         return True
-    def setTempDueMin(self, P):
+    def setTempDueMin(self, P):#sets tempDueMin to current input
         print('Setting tempDueMin')
         global tempDueMin
         try:
-            tempDueMin = int(P)
+            tempDueMin = int(P)#set string to int
             print(tempDueMin)
         except :
             pass
@@ -254,10 +239,9 @@ class Application(tk.Frame):
 
 
 if __name__ == '__main__':
-    start()
-    # refreshList()
-    root = tk.Tk()
-    root.title("Assignment Manager")
-    app = Application(root)
-    app.refreshList()
-    root.mainloop()
+    start()#startup (load)
+    root = tk.Tk()# create tkinter object
+    root.title("Assignment Manager")# set title
+    app = Application(root)#create instance of Application
+    app.refreshList()#adds items to treview
+    root.mainloop()####MAINLOOP####
